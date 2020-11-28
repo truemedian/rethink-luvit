@@ -170,6 +170,7 @@ function Reql:run(options, callback)
 
         should_yield = true
         callback = function(...)
+            -- TODO: replace this with luvit/utils's assertResume
             assert(coroutine.resume(thread, ...))
         end
     else
