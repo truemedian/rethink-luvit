@@ -40,7 +40,7 @@ local default_options = {
     username = 'admin',
     password = '',
     database = 'test',
-    logLevel = 4,
+    logLevel = 3,
     logFile = 'luvitreql.log',
     dateFormat = '%F %T',
 }
