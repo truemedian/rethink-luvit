@@ -1,3 +1,4 @@
+.vscode/
 
 tests/rethinkdb_data
 deps/
