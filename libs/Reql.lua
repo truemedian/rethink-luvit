@@ -78,6 +78,13 @@ function Reql:__index(key)
     end
 end
 
+local function assertResume(thread, ...)
+    local success, err = coroutine.resume(thread, ...)
+    if not success then
+        error(debug.traceback(thread, err), 0)
+    end
+end
+
 Reql.__typename = 'Reql'
 ---@type Reql
 Reql.raw = setmetatable({root = true}, Reql)
@@ -170,8 +177,7 @@ function Reql:run(options, callback)
 
         should_yield = true
         callback = function(...)
-            -- TODO: replace this with luvit/utils's assertResume
-            assert(coroutine.resume(thread, ...))
+            assertResume(thread, ...)
         end
     else
         should_yield = false

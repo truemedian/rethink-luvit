@@ -3,6 +3,8 @@
 
 A database driver for rethinkdb for the [Luvit](https://luvit.io/) environment.
 
+This project was inspired by [DannehSC/luvit-reql](https://github.com/DannehSC/luvit-reql).
+
 ## Notice
 
 Rethink Luvit was built with coroutines in mind, therefore `Connection:connect()` **must** be run inside of a coroutine. This may change in the future.
@@ -23,23 +25,23 @@ assert(connection:connect())
 ### Connection Options
 
 `Connection.new` takes a table of optional arguments, these are listed below along with their defaults.
-| Name       | Type   | Default         | Description                                                 |
-|------------|--------|-----------------|-------------------------------------------------------------|
-| host       | string | "127.0.0.1"     | The server's ip                                             |
-| port       | number | 28015           | The server's port                                           |
-| username   | string | "admin"         | The username to use for authentication                      |
-| password   | string | ""              | The password to use for authentication                      |
-| database   | string | "test"          | The database to prepend to all queries                      |
-| logLevel   | number | 3 (Info)        | The maximum level of information log (see below)            |
+| Name       |  Type  |     Default     | Description                                                 |
+| ---------- | :----: | :-------------: | ----------------------------------------------------------- |
+| host       | string |   "127.0.0.1"   | The server's ip                                             |
+| port       | number |      28015      | The server's port                                           |
+| username   | string |     "admin"     | The username to use for authentication                      |
+| password   | string |       ""        | The password to use for authentication                      |
+| database   | string |     "test"      | The database to prepend to all queries                      |
+| logLevel   | number |    3 (Info)     | The maximum level of information log (see below)            |
 | logFile    | string | "luvitreql.log" | The file to duplicate all log information into              |
-| dateFormat | string | "%F %T"         | The format (as passed to os.date) to use for log timestamps |
+| dateFormat | string |     "%F %T"     | The format (as passed to os.date) to use for log timestamps |
 
 ### Log Levels
 
 Rethink Luvit's Logger enumerates logLevel like so:
 | Number | Name  | Description                                                                                   |
-|--------|-------|-----------------------------------------------------------------------------------------------|
-| 0      | -     | absolutely nothing.                                                                           |
+| ------ | :---: | --------------------------------------------------------------------------------------------- |
+| 0      |   -   | absolutely nothing.                                                                           |
 | 1      | Error | fatal errors, such as authentication failures.                                                |
 | 2      | Warn  | fatal and non-fatal errors (warnings), like connections closing and queries receiving errors. |
 | 3      | Info  | errors, and basic information, such as a connection being formed successfully.                |
@@ -55,9 +57,9 @@ local connection = rethink.Connection.new()
 
 assert(connection:connect())
 
-local success_insert = connection.table('table').insert({id = 1, test = 'wow'}):run()
+local success_insert = connection.reql.table('table').insert({id = 1, test = 'wow'}):run()
 
-local success_get, cursor = connection.table('table').get(1):run()
+local success_get, cursor = connection.reql.table('table').get(1):run()
 
 if success_get then
     for i, data in pairs(cursor) do
@@ -74,13 +76,13 @@ local connection = rethink.Connection.new()
 
 assert(connection:connect())
 
-connection.table('table').insert({id = 1, test = 'wow'}):run(function(success)
+connection.reql.table('table').insert({id = 1, test = 'wow'}):run(function(success)
     -- somehow resume here, insert completed
 end)
 
 -- somehow yield here, wait for insert to complete
 
-connection.table('table').get(1):run(function(success, cursor)
+connection.reql.table('table').get(1):run(function(success, cursor)
     if success_get then
         for i, data in pairs(cursor) do
             p(data) -- p() is luvit's pretty print function
