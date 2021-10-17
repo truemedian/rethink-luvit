@@ -42,10 +42,21 @@ function wrappers.argArityN(...)
     return args
 end
 
--- Automatically wrap the table passed to `insert' in a datum
+-- Automatically wrap the tables passed to `insert`, `update` and `replace` in a datum
 function wrappers.insert(reql, args, opt)
     args[1] = reql.raw.datum(args[1])
     return args, opt
 end
+
+function wrappers.update(reql, args, opt)
+    args[1] = reql.raw.datum(args[1])
+    return args, opt
+end
+
+function wrappers.replace(reql, args, opt)
+    args[1] = reql.raw.datum(args[1])
+    return args, opt
+end
+
 
 return wrappers
