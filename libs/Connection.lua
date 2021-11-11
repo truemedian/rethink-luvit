@@ -21,7 +21,6 @@ local pack = string.pack
 ---@field public socket Socket
 ---@field public logger Logger
 ---@field public r Reql
----@field public reql Reql
 local Connection = {}
 Connection.__index = Connection
 
@@ -30,7 +29,6 @@ Connection.__index = Connection
 ---@field port number
 ---@field username string
 ---@field password string
----@field database string
 ---@field logLevel number
 ---@field logFile string
 ---@field dateFormat string
@@ -39,7 +37,6 @@ local default_options = {
     port = 28015,
     username = 'admin',
     password = '',
-    database = 'test',
     logLevel = 3,
     logFile = 'luvitreql.log',
     dateFormat = '%F %T',
@@ -68,12 +65,6 @@ function Connection.new(opts)
     self.last_token = 0
 
     self.r = Reql.new(self)
-
-    if options.database == false then
-        self.reql = self.r
-    else
-        self.reql = self.r.db(options.database)
-    end
 
     process.init(self)
     return self

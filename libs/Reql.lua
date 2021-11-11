@@ -128,7 +128,7 @@ function Reql:run(options, callback)
     local conn = options.connection or self.conn
 
     if not conn then
-        self.conn.logger:error('Cannot run raw query without options.connection.')
+        -- This is a raw query and we didn't get a connection
         local err = Error.ReqlDriverError('Connection missing.')
 
         if callback then
