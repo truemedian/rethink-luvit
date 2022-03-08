@@ -57,9 +57,13 @@ local connection = rethink.Connection.new()
 
 assert(connection:connect())
 
-local success_insert = connection.reql.table('table').insert({id = 1, test = 'wow'}):run()
+local success_insert = connection.r.table('table').insert({id = 1, test = 'wow'}):run()
 
-local success_get, cursor = connection.reql.table('table').get(1):run()
+if not success_insert then
+    error('something went wrong')
+end
+
+local success_get, cursor = connection.r.table('table').get(1):run()
 
 if success_get then
     for i, data in pairs(cursor) do
@@ -76,17 +80,15 @@ local connection = rethink.Connection.new()
 
 assert(connection:connect())
 
-connection.reql.table('table').insert({id = 1, test = 'wow'}):run(function(success)
-    -- somehow resume here, insert completed
-end)
-
--- somehow yield here, wait for insert to complete
-
-connection.reql.table('table').get(1):run(function(success, cursor)
-    if success_get then
-        for i, data in pairs(cursor) do
-            p(data) -- p() is luvit's pretty print function
-        end
+connection.r.table('table').insert({id = 1, test = 'wow'}):run(function(success)
+    if success then
+        connection.r.table('table').get(1):run(function(success, cursor)
+            if success_get then
+                for i, data in pairs(cursor) do
+                    p(data) -- p() is luvit's pretty print function
+                end
+            end
+        end)
     end
 end)
 ```
